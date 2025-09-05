@@ -6,12 +6,45 @@
 
 ## (1) Setup Calculation (using `Example`)
 1. Copy the original DFT calculation directory into **`Example/1.dft`**.  
+
 2. Modify **`origin/RUN.fdf`** to be comparable with **`1.dft/RUN.fdf`** (note: keep the `DFT-half` option) 
+
 3. Paste all **`.ion`** files into the **`original`** directory (note: some may already be corrected).  
-4. Edit **`2.python.py`** to update the following:  
-   - `DB`: path of all-electron potential  
-   - `name`: species  
-   - `name_output`: output name  
+
+4. Modify the YAML input file **`input.yaml`**. The input file is structured as follows:
+
+   - **`VS_DB`**:  
+     Path to the database of all-electron potentials.  
+     Example:  
+     ```yaml
+     VS_DB: "/home3/DB_psf/04.Alpha/01.LDA/30meV"
+     ```
+
+   - **`Species`**:  
+     Information about the target species. This section includes:
+       - **`DB`**: Name of the species in the database (used to locate potential files).  
+       - **`ION`**: Name of the ion file to be used for calculation.  
+       - **`Occupation`**: Occupation number correction (usually a fractional value, e.g., `-0.30`).  
+     Example:  
+     ```yaml
+     Species:
+       DB: "C"
+       ION: "C"
+       Occupation: -0.30
+     ```
+
+   - **`Rc`**:  
+     Defines the cutoff radius scan range. This is used to search for the optimal cutoff parameter.  
+       - **`Min`**: Minimum cutoff radius.  
+       - **`Max`**: Maximum cutoff radius.  
+       - **`Npt`**: Number of sampling points between Min and Max.  
+     Example:  
+     ```yaml
+     Rc:
+       Min: 0.0
+       Max: 6.0
+       Npt: 61
+     ```
 5. Execute:  
    ```bash
    python 2.alpha.py
