@@ -2,6 +2,8 @@ import os
 import numpy as np
 import shutil
 import glob
+from omegaconf import DictConfig, OmegaConf
+
 
 def run_atm(exec_atm, input_inp, output_ion):
 
@@ -16,21 +18,37 @@ def run_atm(exec_atm, input_inp, output_ion):
 
 if __name__ == '__main__':
 
-    DB = '/home3/DB_psf/04.Alpha/01.LDA/30meV'
+    input_config = OmegaConf.load('input.yaml')
+
+    # Input files =========================
+
+    # All-electron Vs potential
+    name = input_config['Species']['DB']
+    ion_name = input_config['Species']['ION']
+    occ = input_config['Occupation']
+    DB = input_config['VS_DB']
+
+    # Rc range
+    rc_max = input_config['Rc']['Max']
+    rc_min = input_config['Rc']['Min']
+    rc_npt = input_config['Rc']['Npt']
+
+    # =======================================
+
 
     # executable files
     exec_atm = os.path.abspath('./input/atm')
     exec_gion = os.path.abspath('./input/gion.py')
     exec_gatm = os.path.abspath('./input/gatm.py')
 
-    # input files
-    name = 'C'
-    name_out = 'C'
-    occ = '-0.30'
+    # reference input
     input_siesta = os.path.abspath('./1.dft/input')
     input_run = os.path.abspath(f'origin/RUN.fdf')
-    input_ion = os.path.abspath(f'origin/{name_out}.ion')
     input_slm = os.path.abspath(f'origin/slm_*')
+
+    input_ions = glob.glob('origin/*.ion')
+    input_target_ion = os.path.abspath(f'./1.dft/OUT/{ion_name}.ion') # to be corrected
+
 
     input_fae = os.path.abspath(f'{DB}/{name}/1.ATOM/input/FEPOT') # optional
     if '-' in name:
@@ -41,7 +59,7 @@ if __name__ == '__main__':
     input_dft = os.path.abspath(glob.glob(f'./1.dft/OUT/*.RHO')[0])
 
     # range of rcs
-    rcs = np.linspace(0,6,61)
+    rcs = np.linspace(rc_min,rc_max,rc_npt)
 
     for irc in range(len(rcs)):
 
@@ -52,12 +70,17 @@ if __name__ == '__main__':
         path = os.path.abspath(f'2.alpha/rc={rc:3.2f}')
         os.makedirs(path, exist_ok =True)
 
-        # generate ION
+        # copy reference input files
         os.system(f'cp -r {input_siesta} {path}/.')
         os.system(f'cp -r {input_run} {path}/.')
         os.system(f'cp -r {input_slm} {path}/.')
         os.system(f'cp -r {input_dft} {path}/input/DFT.RHO')
 
-        os.system(f'python {exec_gion} --fae {input_fae} --hae {input_hae} --ion {input_ion} --cut {rc} --n 20 --out {path}/input/{name_out}.ion')
+        # copy reference ion
+        for ion in input_ions:
+            os.system('cp {input_ion} {path}/input/.')
+
+        # generate ion
+        os.system(f'python {exec_gion} --fae {input_fae} --hae {input_hae} --ion {input_target_ion} --rout {rc} --n 20 --out {path}/input/{ion_name}.ion')
 
         

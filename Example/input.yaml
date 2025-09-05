@@ -1,0 +1,11 @@
+
+VS_DB: '/home3/DB_psf/04.Alpha/01.LDA/30meV'
+Species:
+    DB: 'C'
+    ION: 'C'
+Occupation: '-0.30'
+Rc:
+    Min: 0.0
+    Max: 6.0
+    Npt: 61
+
