@@ -83,7 +83,7 @@ if __name__ == '__main__':
 
         # copy reference input files
         os.system(f'cp -r {input_siesta} {path}/.')
-        os.system(f'cp -r {input_run} {path}/.')
+        os.system(f'cp -r {input_run} {path}/input/.')
         os.system(f'cp -r {input_slm} {path}/.')
         os.system(f'cp -r {input_dft} {path}/input/DFT.RHO')
 
