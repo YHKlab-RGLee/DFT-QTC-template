@@ -50,10 +50,21 @@ if __name__ == '__main__':
     input_target_ion = os.path.abspath(f'./1.dft/OUT/{ion_name}.ion') # to be corrected
 
 
+
+
     input_fae = os.path.abspath(f'{DB}/{name}/1.ATOM/input/FEPOT') # optional
+
     if '-' in name:
+        occs = [o.split('=')[-1] for o in os.listdir(f'{DB}/{name}/1.ATOM/output_predicted/')]
+        occs_values = np.array(occs, dtype = float)
+        indx = np.argsort(np.abs(occ-occs_values))[0] # Nearest value
+        occ = occs[indx]
         input_hae = os.path.abspath(f'{DB}/{name}/1.ATOM/output_predicted/occ={occ}/HEPOT')
     else:
+        occs = [o.split('=')[-1] for o in os.listdir(f'{DB}/{name}/1.ATOM/output/')]
+        occs_values = np.array(occs, dtype = float)
+        indx = np.argsort(np.abs(occ-occs_values))[0] # Nearest value
+        occ = occs[indx]
         input_hae = os.path.abspath(f'{DB}/{name}/1.ATOM/output/occ={occ}/HEPOT')
 
     input_dft = os.path.abspath(glob.glob(f'./1.dft/OUT/*.RHO')[0])

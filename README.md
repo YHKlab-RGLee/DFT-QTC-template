@@ -67,9 +67,9 @@ python qsub.py 2.alpha
    - 3rd row: LUMO (eV)
    - 4th row: band gap (eV) 
 
-2. Get total energy (run in the previous directory of `Example`):  
+2. Get total energy:  
    ```bash
-   python 1.get_total_energy
+   python 4.get_total_energy.py
    ```  
    → Generates **`total`** file with:  
    - 1st row: `rc` (Bohr)

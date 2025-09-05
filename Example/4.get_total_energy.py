@@ -24,11 +24,9 @@ def get_es(path):
 
 if __name__ == '__main__':
 
-    path = sys.argv[1]
-
     # input files
-    input_dft = os.path.abspath(f'./{path}/1.dft') 
-    input_scf_alpha = os.path.abspath(f'./{path}/2.alpha') # alpha results
+    input_dft = os.path.abspath(f'1.dft') 
+    input_scf_alpha = os.path.abspath(f'2.alpha') # alpha results
 
     # occ lists
     occs  = sorted(os.listdir(input_scf_alpha))
