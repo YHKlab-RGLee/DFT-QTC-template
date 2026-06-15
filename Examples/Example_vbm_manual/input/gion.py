@@ -76,13 +76,21 @@ def write_ion(fae,hae,ion,rin,rout,n,out):
 
         # tailored self-energy potential
         if (rout > 0) and ((rout-rin)>1e-8):
-            for i in range(cnt):
-                if xnew[i] < rin:
-                    ynew[i] = 0
-                elif rin <= xnew[i] and xnew[i] <= rout:
-                    ynew[i] = ynew[i] * (1-((2*(xnew[i]-rin)/(rout-rin))-1)**n)**3
-                else:
-                    ynew[i] = 0
+            if (abs(rin)<1e-8):
+                for i in range(cnt):
+                    if xnew[i] <= rout:
+                        ynew[i] = ynew[i] * ((1-xnew[i])/(rout)**n)**3
+                    else:
+                        ynew[i] = 0
+            else:
+                for i in range(cnt):
+                    if xnew[i] < rin:
+                        ynew[i] = 0
+                    elif rin <= xnew[i] and xnew[i] <= rout:
+                        ynew[i] = ynew[i] * (1-((2*(xnew[i]-rin)/(rout-rin))-1)**n)**3
+                    else:
+                        ynew[i] = 0
+
         # atomic cases -> no rc
         elif rout < 0:
             pass
