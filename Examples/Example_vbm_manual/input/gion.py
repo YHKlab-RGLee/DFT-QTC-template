@@ -79,7 +79,7 @@ def write_ion(fae,hae,ion,rin,rout,n,out):
             if (abs(rin)<1e-8):
                 for i in range(cnt):
                     if xnew[i] <= rout:
-                        ynew[i] = ynew[i] * ((1-xnew[i])/(rout)**n)**3
+                        ynew[i] = ynew[i] * (1-(xnew[i]/rout)**n)**3
                     else:
                         ynew[i] = 0
             else:
